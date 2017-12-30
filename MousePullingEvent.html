@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mousePullingEvent</title>
+    <script type="text/javascript" src="jquery-3.2.1.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            console.log("页面加载完")
+            //绑定鼠标按下事件,鼠标按下就打印所选目标的坐标,并跟随鼠标的移动打印坐标
+            $("#box").mousedown(function (e) {
+                console.log("鼠标按下");
+                var y_axis = $("#box").offset().top;
+                var x_axis = $("#box").offset().left;
+                console.log("图源位置: " +  x_axis + ", " + y_axis);
+                var x_axis_first = e.pageX;
+                var y_axis_first = e.pageY;
+                console.log("鼠标按下的位置: " + x_axis_first + ", " + y_axis_first);
+
+                $(document).mousemove(function (e) {
+                    console.log("鼠标位置: " + e.pageX + ", " + e.pageY);
+                    var x_axis_add = e.pageX - x_axis_first;
+                    var y_axis_add = e.pageY - y_axis_first;
+                    console.log("鼠标位置变化: X:" + x_axis_add + ", Y:" + y_axis_add);
+
+                    //随着鼠标的移动增量变化,不断调整图源的位置
+                    $("#box").offset({top:y_axis + y_axis_add, left:x_axis + x_axis_add});
+                })
+            });
+
+            //移除鼠标移动事件
+            $("body").mouseup(function () {
+               $(document).off("mousemove");
+            })
+        })
+    </script>
+    <style type="text/css">
+        #workspace{height: 300px; width: 600px; background-color: darkgray}
+        #box{height: 100px; width: 100px; background-color: brown}
+        #box{position: relative; top: 20px}
+    </style>
+</head>
+<body>
+    <div id="workspace">
+        <div id="box"></div>
+    </div>
+</body>
+</html>
